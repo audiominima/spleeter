@@ -10,7 +10,9 @@
 
 import datetime as dt
 import os
+import sys
 import shutil
+from os.path import abspath
 from pathlib import Path
 from typing import Dict, Optional, Union
 
@@ -97,8 +99,15 @@ class FFMPEGProcessAudioAdapter(AudioAdapter):
             path = str(path)
         if not isinstance(path, str):
             path = path.decode()
+            
         try:
-            probe = ffmpeg.probe(path)
+            base_path = sys._MEIPASS
+        except Exception:  
+            base_path = abspath(".")
+        
+        try:
+            cmd = base_path + '/ffprobe
+            probe = ffmpeg.probe(path, cmd=cmd)
         except ffmpeg._run.Error as e:
             raise SpleeterError(
                 "An error occurs with ffprobe (see ffprobe output below)\n\n{}".format(
@@ -118,10 +127,12 @@ class FFMPEGProcessAudioAdapter(AudioAdapter):
             output_kwargs["t"] = str(dt.timedelta(seconds=duration))
         if offset is not None:
             output_kwargs["ss"] = str(dt.timedelta(seconds=offset))
+        
+        cmd = base_path + '/ffmpeg
         process = (
             ffmpeg.input(path)
             .output("pipe:", **output_kwargs)
-            .run_async(pipe_stdout=True, pipe_stderr=True)
+            .run_async(pipe_stdout=True, pipe_stderr=True, cmd=cmd)
         )
         buffer, _ = process.communicate()
         waveform = np.frombuffer(buffer, dtype="<f4").reshape(-1, n_channels)
