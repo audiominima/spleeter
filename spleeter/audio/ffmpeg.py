@@ -66,9 +66,10 @@ class FFMPEGProcessAudioAdapter(AudioAdapter):
             SpleeterError:
                 If ffmpeg or ffprobe is not found.
         """
-        for binary in ("ffmpeg", "ffprobe"):
-            if shutil.which(binary) is None:
-                raise SpleeterError("{} binary not found".format(binary))
+        # Let ffmpeg raise the error
+        #for binary in ("ffmpeg", "ffprobe"):
+        #    if shutil.which(binary) is None:
+        #        raise SpleeterError("{} binary not found".format(binary))
 
     def load(
         _,
