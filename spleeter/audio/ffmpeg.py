@@ -106,7 +106,7 @@ class FFMPEGProcessAudioAdapter(AudioAdapter):
             base_path = abspath(".")
         
         try:
-            cmd = base_path + '/ffprobe
+            cmd = base_path + '/ffprobe'
             probe = ffmpeg.probe(path, cmd=cmd)
         except ffmpeg._run.Error as e:
             raise SpleeterError(
@@ -128,7 +128,7 @@ class FFMPEGProcessAudioAdapter(AudioAdapter):
         if offset is not None:
             output_kwargs["ss"] = str(dt.timedelta(seconds=offset))
         
-        cmd = base_path + '/ffmpeg
+        cmd = base_path + '/ffmpeg'
         process = (
             ffmpeg.input(path)
             .output("pipe:", **output_kwargs)
