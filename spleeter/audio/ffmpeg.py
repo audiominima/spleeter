@@ -41,6 +41,10 @@ except Exception:
 CMD_FFMPEG = base_path + '/ffmpeg'
 CMD_FFPROBE = base_path + '/ffprobe'
 
+if sys.platform == "win32":
+    CMD_FFMPEG += '.exe'
+    CMD_FFPROBE += '.exe'
+
 class FFMPEGProcessAudioAdapter(AudioAdapter):
     """
     An AudioAdapter implementation that use FFMPEG binary through
